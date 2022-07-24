@@ -5,12 +5,12 @@ import { useUserStore } from '../stores/UserStore'
 import { useEventStore } from "../stores/EventStore";
 export default {
   setup () {
-    const userStore = useUserStore()
     const eventStore = useEventStore()
-    // const createEvent = (event) => eventStore.createEvent(event)
+    const userStore = useUserStore()
+
     return {
-      userStore,
-      eventStore
+      eventStore,
+      userStore
     }
   },
   data() {

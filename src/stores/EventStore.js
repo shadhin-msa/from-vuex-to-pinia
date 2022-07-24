@@ -10,7 +10,7 @@ export const useEventStore = defineStore('eventStore', {
     noOfEvents: state => state.events.length
   },
   actions: {
-    createEvent (event) {
+    createEvent(event) {
       return EventService.postEvent(event)
         .then((response) => {
           this.events.push(response.data)
@@ -18,23 +18,13 @@ export const useEventStore = defineStore('eventStore', {
         .catch(error => {
           throw error
         })
-    },
-    
-    fetchEvents () {
-      return EventService.getEvents()
-        .then(response => {
-          this.events = response.data
-        })
-        .catch(error => {
-          throw error
-        })
-    },
-    
+    },    
     fetchEvent (id) {
       const existingEvent = this.events.find(event => event.id === id)
       if(existingEvent) {
         console.log('existing....')
         this.event = existingEvent
+        return Promise.resolve()
       } else {
         console.log('find in db....')
         return EventService.getEvent(id)
@@ -46,5 +36,14 @@ export const useEventStore = defineStore('eventStore', {
           })
       }
     },
+    fetchEvents() {
+      return EventService.getEvents()
+        .then(response => {
+          this.events = response.data
+        })
+        .catch(error => {
+          throw error
+        })
+    }
   }
 })
