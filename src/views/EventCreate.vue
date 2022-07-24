@@ -1,7 +1,18 @@
 <script>
 import { v4 as uuidv4 } from 'uuid'
 
+import { useUserStore } from '../stores/UserStore'
+import { useEventStore } from "../stores/EventStore";
 export default {
+  setup () {
+    const userStore = useUserStore()
+    const eventStore = useEventStore()
+    // const createEvent = (event) => eventStore.createEvent(event)
+    return {
+      userStore,
+      eventStore
+    }
+  },
   data() {
     return {
       categories: [
@@ -27,6 +38,26 @@ export default {
   },
   methods: {
     onSubmit() {
+      const event = {
+        ...this.event,
+        id: uuidv4(),
+        organizer: this.userStore.user
+      }
+      this.eventStore.createEvent(event)
+        .then(() => {
+          this.$router.push({
+            name: 'EventDetails',
+            params: { id: event.id }
+          })
+        })
+        .catch(error => {
+          this.$router.push({
+            name: 'ErrorDisplay',
+            params: { error: error }
+          })
+        })
+    },
+    onSubmitInVuex () {
       const event = {
         ...this.event,
         id: uuidv4(),
